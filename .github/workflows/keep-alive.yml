@@ -1,0 +1,18 @@
+# Supabase bepul loyihalari 1 hafta faolsiz qolsa PAUZA qilinadi (shunda 21:00 hisobot ham to'xtaydi).
+# Bu ish har 2 kunda bazaga so'rov yuborib, loyihani "uyg'oq" ushlab turadi.
+# Ishlatish: kodni GitHub'ga yuklang -> Settings -> Secrets and variables -> Actions ->
+#   SUPABASE_URL va SUPABASE_ANON_KEY ni qo'shing.
+name: supabase-keep-alive
+on:
+  schedule:
+    - cron: "0 3 */2 * *"
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase
+        run: |
+          curl -fsS "${{ secrets.SUPABASE_URL }}/rest/v1/sales?select=id&limit=1" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
